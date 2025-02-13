@@ -1,37 +1,31 @@
-import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import '../styles/App.css'
-import { GetTimezones } from '../lib/remoteData'
-import { Timezone } from '../lib/types'
+import { RootState } from '../lib/state/store'
+import { Button, FormGroup, Grid2, TextField } from '@mui/material'
+import { decrement, increment } from '../lib/state/counter'
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  const count = useSelector((state: RootState) => state.counter.value)
+  const dispatch = useDispatch();
   return (
     <>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={async () => {
-          let timezones: Timezone[]
-          try{
-            timezones = await GetTimezones()
-          } catch(e){
-            console.log("something went wrong")
-            console.log(e)
-            return
-          }
-
-          console.log(timezones)
-
-        }}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+      <h1>Clocks 'round the world</h1>
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <FormGroup row>
+          <Button onClick={() => dispatch(decrement())}> - </Button>
+          <TextField value={count} />
+          <Button onClick={() => dispatch(increment())}> + </Button>
+        </FormGroup>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Grid2 container spacing={2}>
+      {[...Array(count)].map(() => {
+        return (
+          <Grid2 size={3}>
+              clock
+          </Grid2>
+        )
+      })}
+      </Grid2>
     </>
   )
 }
