@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import '../styles/App.css'
+import { GetTimezones } from '../lib/remoteData'
+import { Timezone } from '../lib/types'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -9,15 +11,17 @@ function App() {
       <h1>Vite + React</h1>
       <div className="card">
         <button onClick={async () => {
-          const resp = await fetch("/timezones.json");
-          if (!resp.ok) {
-            console.log("shit")
+          let timezones: Timezone[]
+          try{
+            timezones = await GetTimezones()
+          } catch(e){
+            console.log("something went wrong")
+            console.log(e)
             return
           }
 
-          const json = await resp.text()
+          console.log(timezones)
 
-          console.log(json)
         }}>
           count is {count}
         </button>

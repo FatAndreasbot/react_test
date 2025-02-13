@@ -1,6 +1,6 @@
 
 
-type Timezone = {
+export type Timezone = {
 	vale:String,
 	abbr:String,
 	offset: Number,
