@@ -8,7 +8,7 @@ import { SetList } from '../lib/state/timezones'
 
 function App() {
   const count = useSelector((state: RootState) => state.counter.value)
-  const tzData = useSelector((state: RootState) => state.timezone.value)
+  const tzData = useSelector((state: RootState) => state.clockData.tzData)
   const dispatch = useDispatch<AppDispatch>();
 
   if (tzData.length === 0){

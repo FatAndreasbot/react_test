@@ -1,10 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import timezoneReducer from './timezones'
+import clockDataReducer from './timezones'
 import counterReducer from "./counter"
 
 export const store = configureStore({
 	reducer: {
-		timezone: timezoneReducer,
+		clockData: clockDataReducer,
 		counter: counterReducer
 	}
 })

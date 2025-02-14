@@ -1,22 +1,34 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Timezone } from "../types";
 import { GetTimezones } from "../remoteData";
+import { MAX_AMMOUNT_OF_CLOCKS } from "../constants";
 
-interface downloadedTimezonesState {
-	value: Timezone[]
+interface clockDataState {
+	tzData: Timezone[],
+	clocks: number[]
 }
 
-const initialDownloadedTimezones: downloadedTimezonesState = {
-	value: []
+const initialclockData: clockDataState = {
+	tzData: [],
+	clocks: Array.apply(null, Array(MAX_AMMOUNT_OF_CLOCKS)).map(() => 0)
 }
 
-const downloadedTimezonesSlice = createSlice({
+const clockDataSlice = createSlice({
 	name: "tz_slice",
-	initialState: initialDownloadedTimezones,
-	reducers: {},
+	initialState: initialclockData,
+	reducers: {
+		changeTimezone: (state, action:PayloadAction<{clockID:number, tzID:number}>) => {
+			if (action.payload.clockID > MAX_AMMOUNT_OF_CLOCKS || action.payload.clockID < 0)
+				return
+			if (action.payload.tzID > state.tzData.length || action.payload.tzID < 0)
+				return
+
+			state.clocks[action.payload.clockID] = action.payload.tzID
+		}
+	},
 	extraReducers: (builder) => {
 		builder.addCase(SetList.fulfilled, (state, action) => {
-			state.value = action.payload
+			state.tzData = action.payload
 		})
 	}
 })
@@ -28,4 +40,6 @@ export const SetList = createAsyncThunk(
 	}
 )
 
-export default downloadedTimezonesSlice.reducer
+export const {changeTimezone} = clockDataSlice.actions
+
+export default clockDataSlice.reducer

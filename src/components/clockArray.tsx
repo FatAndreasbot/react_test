@@ -8,17 +8,17 @@ import { Clock } from './clock'
 
 export default function ClockArray() {
 	const count = useSelector((state: RootState) => state.counter.value)
-	const tzData = useSelector((state: RootState) => state.timezone.value)
+	const tzData = useSelector((state: RootState) => state.clockData.tzData)
 
 	if (tzData.length == 0) {
 		return <p>loading</p>
 	}
 
 	return <>
-		{[...Array(count)].map(() => {
+		{[...Array(count)].map((_,i) => {
 			return (
-				<Grid2 size={3}>
-					<Clock />
+				<Grid2 size={4} key={i}>
+					<Clock id={i}/>
 				</Grid2>
 			)
 		})}
