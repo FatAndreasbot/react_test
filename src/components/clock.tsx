@@ -2,6 +2,7 @@ import { Autocomplete, TextField } from '@mui/material'
 import { AppDispatch, RootState } from '../lib/state/store'
 import { useSelector, useDispatch } from 'react-redux'
 import { changeTimezone } from '../lib/state/timezones'
+import { useState } from 'react'
 
 
 
@@ -14,6 +15,10 @@ export function Clock({id}:{id:number}) {
   const tzAutocomplete = tzData.flatMap((tz, id) => tz.utc.map((utc) => {return {label:utc, tz_id:id}})).filter((v) => {
     return !tzData[v.tz_id].isdst
   })
+  
+  let time = Date.now()
+  const [ctime, setTime] = useState(time)
+  const UpdateTime = () => {time = new Date.to}
   
   const tzID = clockData[id]
   console.log(clockData)
