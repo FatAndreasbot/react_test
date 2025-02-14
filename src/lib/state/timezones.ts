@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { Timezone } from "../types";
 import { GetTimezones } from "../remoteData";
 
@@ -11,16 +11,21 @@ const initialDownloadedTimezones: downloadedTimezonesState = {
 }
 
 const downloadedTimezonesSlice = createSlice({
-	name: "downloaded_tz",
+	name: "tz_slice",
 	initialState: initialDownloadedTimezones,
-	reducers: {
-		GetData: (state) => {
-			if (state.value.length > 0) {
-				GetTimezones().then((list) => { state.value = list })
-			}
-		}
+	reducers: {},
+	extraReducers: (builder) => {
+		builder.addCase(SetList.fulfilled, (state, action) => {
+			state.value = action.payload
+		})
 	}
 })
 
+export const SetList = createAsyncThunk(
+	"tz_slice/download",
+	async () => {
+		return await GetTimezones()
+	}
+)
+
 export default downloadedTimezonesSlice.reducer
-export const { GetData } = downloadedTimezonesSlice.actions

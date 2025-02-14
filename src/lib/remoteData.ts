@@ -4,7 +4,7 @@ import { Timezone } from "./types";
 export async function GetTimezones():Promise<Timezone[]> {
 
 	// slowing the data fetching time on purpose
-	await new Promise(resolve => setTimeout(resolve, 2500))
+	await new Promise(resolve => setTimeout(resolve, 500))
 
 	const resp = await fetch("/timezones.json");
 	if (!resp.ok) {

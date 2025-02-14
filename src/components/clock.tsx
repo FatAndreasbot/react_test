@@ -1,14 +1,13 @@
-import { Timezone } from "../lib/types";
 
 
 
-export function Clock({ tz }: { tz: Timezone }) {
+export function Clock() {
 
   return (
     <>
-      <h1>
+      <h2>
         12:13:14
-      </h1>
+      </h2>
     </>
   )
 }

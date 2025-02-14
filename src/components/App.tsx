@@ -1,12 +1,20 @@
 import { useDispatch, useSelector } from 'react-redux'
 import '../styles/App.css'
-import { RootState } from '../lib/state/store'
+import { AppDispatch, RootState } from '../lib/state/store'
 import { Button, FormGroup, Grid2, TextField } from '@mui/material'
 import { decrement, increment } from '../lib/state/counter'
+import ClockArray from './clockArray'
+import { SetList } from '../lib/state/timezones'
 
 function App() {
   const count = useSelector((state: RootState) => state.counter.value)
-  const dispatch = useDispatch();
+  const tzData = useSelector((state: RootState) => state.timezone.value)
+  const dispatch = useDispatch<AppDispatch>();
+
+  if (tzData.length === 0){
+    dispatch(SetList())
+  }
+
   return (
     <>
       <h1>Clocks 'round the world</h1>
@@ -18,13 +26,7 @@ function App() {
         </FormGroup>
       </div>
       <Grid2 container spacing={2}>
-      {[...Array(count)].map(() => {
-        return (
-          <Grid2 size={3}>
-              clock
-          </Grid2>
-        )
-      })}
+        <ClockArray/>
       </Grid2>
     </>
   )
