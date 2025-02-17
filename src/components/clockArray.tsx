@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux'
 import { RootState } from '../lib/state/store'
 import { Grid2 } from '@mui/material'
-import { Clock } from './clock'
+import { ClockContainer } from './clockContainer'
 
 
 
@@ -18,7 +18,7 @@ export default function ClockArray() {
 		{[...Array(count)].map((_,i) => {
 			return (
 				<Grid2 size={4} key={i}>
-					<Clock id={i}/>
+					<ClockContainer id={i}/>
 				</Grid2>
 			)
 		})}

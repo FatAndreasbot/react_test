@@ -10,7 +10,7 @@ interface clockDataState {
 
 const initialclockData: clockDataState = {
 	tzData: [],
-	clocks: Array.apply(null, Array(MAX_AMMOUNT_OF_CLOCKS)).map(() => 0)
+	clocks: Array.apply(null, Array(MAX_AMMOUNT_OF_CLOCKS)).map(() => -1)
 }
 
 const clockDataSlice = createSlice({

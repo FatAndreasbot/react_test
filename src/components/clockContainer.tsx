@@ -3,23 +3,33 @@ import { AppDispatch, RootState } from '../lib/state/store'
 import { useSelector, useDispatch } from 'react-redux'
 import { changeTimezone } from '../lib/state/timezones'
 import { useState } from 'react'
+import { MAX_AMMOUNT_OF_CLOCKS } from '../lib/constants'
 
 
 
 
-export function Clock({id}:{id:number}) {
+export function ClockContainer({id}:{id:number}) {
   const tzData = useSelector((state: RootState) => state.clockData.tzData)
   const clockData = useSelector((state: RootState) => state.clockData.clocks)
-	const count = useSelector((state: RootState) => state.counter.value)
   const dispatch = useDispatch<AppDispatch>()
 
-  const disallowedTZ = Array.from({length:count}, (_, i) => {return clockData[i]})
+  const disallowedTZ = Array.from({length:MAX_AMMOUNT_OF_CLOCKS}, (_, i) => {return clockData[i]})
   
-  let tzAutocomplete = tzData.flatMap((tz, id) => tz.utc.map((utc) => {return {label:utc, tz_id:id}})).filter((v) => {
+  const tzAutocomplete = tzData.flatMap((tz, id) => tz.utc.map((utc) => {return {label:utc, tz_id:id}})).filter((v) => {
     return !tzData[v.tz_id].isdst
   }).filter((v, _) => {return !disallowedTZ.includes(v.tz_id)})
 
-
+  const selectElement = <Autocomplete
+  disablePortal
+  options={tzAutocomplete}
+  sx={{ width: "100%" }}
+  renderInput={(params) => <TextField {...params} label="Timezone" />}
+  onChange={(_, val) => {
+    if (val !== null){
+      dispatch(changeTimezone({clockID:id, tzID:val.tz_id}))
+    }
+  }}
+  />
   
   const tz = tzData[clockData[id]]
 
@@ -28,6 +38,17 @@ export function Clock({id}:{id:number}) {
   const UpdateTime = () => {
     time = new Date()
     setTime(time)
+  }
+
+  if (clockData[id] === -1){
+    return (
+      <div>
+        <h2>
+          pick a timezone
+        </h2>
+        {selectElement}
+      </div>
+    )
   }
 
   setInterval(UpdateTime)
@@ -48,17 +69,7 @@ export function Clock({id}:{id:number}) {
         {`${hours}:${minutes}:${seconds}`}
       </h2>
       <p>{tz.text}</p>
-      <Autocomplete
-      disablePortal
-      options={tzAutocomplete}
-      sx={{ width: 300 }}
-      renderInput={(params) => <TextField {...params} label="Timezone" />}
-      onChange={(_, val) => {
-        if (val !== null){
-          dispatch(changeTimezone({clockID:id, tzID:val.tz_id}))
-        }
-      }}
-    />
+      {selectElement}
     </div>
   )
 }
