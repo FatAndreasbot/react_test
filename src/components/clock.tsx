@@ -16,16 +16,25 @@ export function Clock({id}:{id:number}) {
     return !tzData[v.tz_id].isdst
   })
   
-  let time = Date.now()
+  const tz = tzData[clockData[id]]
+
+  let time = new Date()
   const [ctime, setTime] = useState(time)
-  const UpdateTime = () => {time = new Date.to}
-  
-  const tzID = clockData[id]
-  console.log(clockData)
+  const UpdateTime = () => {
+    time = new Date()
+    setTime(time)
+  }
+
+  setInterval(UpdateTime)
+
+  const hours = (ctime.getUTCHours() + Math.floor(tz.offset)> 0) ? ctime.getUTCHours() + Math.floor(tz.offset) : 24 + ctime.getUTCHours() + Math.floor(tz.offset)
+  const minutes = ctime.getUTCMinutes() + 60 * (tz.offset - Math.floor(tz.offset))
+  const seconds = ctime.getUTCSeconds()
+
   return (
     <div>
       <h2>
-        {tzData[tzID].text}
+        {`${hours}:${minutes}:${seconds}`}
       </h2>
       <Autocomplete
       disablePortal

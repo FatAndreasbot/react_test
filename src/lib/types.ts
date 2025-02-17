@@ -3,7 +3,7 @@
 export type Timezone = {
 	vale:String,
 	abbr:String,
-	offset: Number,
+	offset: number,
 	isdst: Boolean,
 	text: String,
 	utc: Array<String>
