@@ -1,4 +1,4 @@
-import "../styles/clock.css"
+import React from 'react';
 
 export function Clock({ hours, minutes, seconds }: { hours: number, minutes: number, seconds: number }) {
   return (
