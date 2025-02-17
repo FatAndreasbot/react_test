@@ -1,5 +1,5 @@
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux'
-import '../styles/App.css'
 import { AppDispatch, RootState } from '../lib/state/store'
 import { Button, FormGroup, Grid2, TextField } from '@mui/material'
 import { decrement, increment } from '../lib/state/counter'
@@ -11,7 +11,7 @@ function App() {
   const tzData = useSelector((state: RootState) => state.clockData.tzData)
   const dispatch = useDispatch<AppDispatch>();
 
-  if (tzData.length === 0){
+  if (tzData.length === 0) {
     dispatch(SetList())
   }
 
@@ -26,7 +26,7 @@ function App() {
         </FormGroup>
       </div>
       <Grid2 container spacing={2}>
-        <ClockArray/>
+        <ClockArray />
       </Grid2>
     </>
   )
