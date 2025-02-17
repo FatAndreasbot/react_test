@@ -10,11 +10,16 @@ import { useState } from 'react'
 export function Clock({id}:{id:number}) {
   const tzData = useSelector((state: RootState) => state.clockData.tzData)
   const clockData = useSelector((state: RootState) => state.clockData.clocks)
+	const count = useSelector((state: RootState) => state.counter.value)
   const dispatch = useDispatch<AppDispatch>()
 
-  const tzAutocomplete = tzData.flatMap((tz, id) => tz.utc.map((utc) => {return {label:utc, tz_id:id}})).filter((v) => {
+  const disallowedTZ = Array.from({length:count}, (_, i) => {return clockData[i]})
+  
+  let tzAutocomplete = tzData.flatMap((tz, id) => tz.utc.map((utc) => {return {label:utc, tz_id:id}})).filter((v) => {
     return !tzData[v.tz_id].isdst
-  })
+  }).filter((v, _) => {return !disallowedTZ.includes(v.tz_id)})
+
+
   
   const tz = tzData[clockData[id]]
 
@@ -27,15 +32,22 @@ export function Clock({id}:{id:number}) {
 
   setInterval(UpdateTime)
 
-  const hours = (ctime.getUTCHours() + Math.floor(tz.offset)> 0) ? ctime.getUTCHours() + Math.floor(tz.offset) : 24 + ctime.getUTCHours() + Math.floor(tz.offset)
-  const minutes = ctime.getUTCMinutes() + 60 * (tz.offset - Math.floor(tz.offset))
+  let hours = ctime.getUTCHours() + Math.floor(tz.offset)
+  let minutes = ctime.getUTCMinutes() + 60 * (tz.offset - Math.floor(tz.offset))
   const seconds = ctime.getUTCSeconds()
+
+  if (hours < 0) hours += 24
+  if (minutes >= 60) {
+    minutes -= 60
+    hours ++
+  }
 
   return (
     <div>
       <h2>
         {`${hours}:${minutes}:${seconds}`}
       </h2>
+      <p>{tz.text}</p>
       <Autocomplete
       disablePortal
       options={tzAutocomplete}
