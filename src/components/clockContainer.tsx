@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { changeTimezone } from '../lib/state/timezones'
 import { useState } from 'react'
 import { MAX_AMMOUNT_OF_CLOCKS } from '../lib/constants'
+import { Clock } from './clock'
 
 
 
@@ -65,9 +66,7 @@ export function ClockContainer({id}:{id:number}) {
 
   return (
     <div>
-      <h2>
-        {`${hours}:${minutes}:${seconds}`}
-      </h2>
+      <Clock hours={hours} minutes={minutes} seconds={seconds} />
       <p>{tz.text}</p>
       {selectElement}
     </div>
